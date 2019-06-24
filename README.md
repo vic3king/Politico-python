@@ -1,4 +1,6 @@
-# Politico python version is a spin off of my initial project Politico. This Project rebuilds the backend application with new technologies.
+# Politico
+
+Politico python version is a spin off of my initial project Politico. This Project rebuilds the backend application with new technologies.
 
 * [Politico-React](https://github.com/vic3king/Politico-React) - Frontend Application of the politico application. Built with React
 * [Politico-Api-Node-Version](https://github.com/vic3king/politico) - Initial version of the politico application. Built with Javascript
