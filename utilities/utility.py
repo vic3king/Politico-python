@@ -1,7 +1,6 @@
 import enum
-import api
 from helpers.database import db_session
-from sqlalchemy import event
+
 
 class Utility(object):
 
