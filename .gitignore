@@ -8,3 +8,19 @@ ENV/
 
 __pycache__/
 *.pyc
+*.egg-info/
+*.egg
+
+# Unit test / coverage reports
+htmlcov/
+html_coverage_report/
+.tox/
+.coverage
+.coverage.*
+.coveragerc
+setup.cfg
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
