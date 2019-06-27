@@ -1,10 +1,8 @@
 import graphene
 from graphene_sqlalchemy import (SQLAlchemyObjectType)
-from sqlalchemy import func, exc
-from graphql import GraphQLError
 
 from api.user.models import User as UserModel
-from utilities.validators import verify_email
+# from utilities.validators import verify_email
 
 
 class User(SQLAlchemyObjectType):
@@ -32,12 +30,9 @@ class CreateUser(graphene.Mutation):
 
     def mutate(self, info, **kwargs):
         user = UserModel(**kwargs)
-        print(verify_email(user.email))
         # if verify_email(user.email):
         #     raise GraphQLError("This email is not allowed")
-    
         user.save()
-
         return CreateUser(user=user)
 
 

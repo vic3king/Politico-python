@@ -1,7 +1,4 @@
-import sqlalchemy
-from sqlalchemy import (Column, String, Integer, Table, Enum)
-from sqlalchemy import UniqueConstraint
-from sqlalchemy.orm import relationship
+from sqlalchemy import (Column, String, Integer, Enum)
 from sqlalchemy.schema import Sequence
 
 from helpers.database import Base

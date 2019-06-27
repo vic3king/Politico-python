@@ -1,10 +1,6 @@
-
-import graphene
 import api.user.schema
 
-from graphene import relay, Schema
-from graphene_sqlalchemy import (SQLAlchemyObjectType,
-                                 SQLAlchemyConnectionField)
+from graphene import Schema
 
 
 # class Query(
@@ -26,5 +22,6 @@ class Query(
 ):
     """Root for converge Graphql queries"""
     pass
+
 
 schema = Schema(mutation=Mutation, query=Query)
