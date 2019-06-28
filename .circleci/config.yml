@@ -60,7 +60,6 @@ store_the_artifacts: &store_the_artifacts
     destination: test-reports
 
 workflows:
-  version: 2
   build-test-and-deploy:
     jobs:
       test-2.7:
