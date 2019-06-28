@@ -78,7 +78,7 @@ jobs:
             coverage xml
       - *store_the_artifacts
 
-  test-3.6-flake:
+  test-3.7-flake:
     <<: *defaults
     <<: *set_workspace
 
