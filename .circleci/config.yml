@@ -60,25 +60,25 @@ store_the_artifacts: &store_the_artifacts
     destination: test-reports
 
 version: 2
-  jobs: 
-    test-2.7:
-      <<: *defaults
-        <<: *set_workspace
+jobs:
+  test-2.7:
+    <<: *defaults
+    <<: *set_workspace
 
-        steps:
-          - checkout
-          - *restore_the_cache
-          - *install_dependencies
-          - *save_the_cache
-          - run:
-              name: run tests
-              command: |
-                . venv/bin/activate
-                tox -e python2.7
-                coverage xml
-          - *store_the_artifacts
+    steps:
+      - checkout
+      - *restore_the_cache
+      - *install_dependencies
+      - *save_the_cache
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            tox -e python2.7
+            coverage xml
+      - *store_the_artifacts
 
-      test-3.7-flake:
+    test-3.7-flake:
         <<: *defaults
         <<: *set_workspace
 
@@ -96,32 +96,33 @@ version: 2
                 coverage xml
           - *store_the_artifacts
 
-      code-climate:
-        <<: *defaults
-        <<: *set_workspace
+  code-climate:
+    <<: *defaults
+    <<: *set_workspace
 
-        steps:
-          - checkout
-          - *restore_the_cache
-          - *cc_setup
-          - run:
-              name: consolidate results
-              command: |
-                ./cc-test-reporter before-build
-                . venv/bin/activate
-                coverage combine parallel-coverage/ 
-                coverage xml
-                coverage report
-                ./cc-test-reporter format-coverage -o ./.coverage -t coverage.py
-                ./cc-test-reporter upload-coverage -i .coverage
+    steps:
+      - checkout
+      - *restore_the_cache
+      - *cc_setup
+      - run:
+          name: consolidate results
+          command: |
+            ./cc-test-reporter before-build
+            . venv/bin/activate
+            coverage combine parallel-coverage/ 
+            coverage xml
+            coverage report
+            ./cc-test-reporter format-coverage -o ./.coverage -t coverage.py
+            ./cc-test-reporter upload-coverage -i .coverage
+
 
 workflows:
   version: 2
   build-then-deploy:
     jobs:
-      - test-3.5
-      - test-3.6-flake
+      - test-2.7
+      - test-3.7-flake
       - code-climate:
           requires:
-            - test-3.5
-            - test-3.6-flake
+            - test-2.7
+            - test-3.7-flake
