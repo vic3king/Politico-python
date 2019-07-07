@@ -1,5 +1,9 @@
 
+import sys
+import os
 from logging.config import fileConfig
+from helpers.database import Base
+from api.user.models import User
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -14,17 +18,29 @@ config = context.config
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
 
+
+database_url = ''
+if os.getenv('APP_SETTINGS') == 'testing':
+    database_url = os.getenv('TEST_DATABASE_URL')
+elif os.getenv('APP_SETTINGS') == 'development':
+    database_url = os.getenv('DEV_DATABASE_URL')
+elif os.getenv('APP_SETTINGS') == 'production':
+    database_url = os.getenv('DATABASE_URL')
+
+sys.path.append(os.getcwd())
+config.set_main_option('sqlalchemy.url', database_url)
+
 # add your model's MetaData object here
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Base.metadata
+
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
 # my_important_option = config.get_main_option("my_important_option")
 # ... etc.
-
 
 def run_migrations_offline():
     """Run migrations in 'offline' mode.

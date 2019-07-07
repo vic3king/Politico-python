@@ -1,8 +1,9 @@
 import re
 from graphql import GraphQLError
 
+
 def verify_email(email):
-    return bool(re.match('^.+@(\[?)[a-zA-Z0-9-.]+.', email))
+    return bool(re.match('^.+@(\[?)[a-zA-Z0-9-.]+.', email))  # noqa
 
 
 class ErrorHandler():
@@ -21,4 +22,3 @@ class ErrorHandler():
     def db_connection(self):
         # Database connection error
         raise GraphQLError('Error: Could not connect to Db')
-

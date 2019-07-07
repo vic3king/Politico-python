@@ -38,7 +38,7 @@ class BaseTestCase(TestCase):
             admin_user = User(first_name="doe",
                               last_name="jon",
                               other_names="smith",
-                              email="example@yahoo.com",
+                              email="admin@yahoo.com",
                               password="12345678",
                               picture="https://picsum.photos/200",
                               user_type="admin")
@@ -50,4 +50,4 @@ class BaseTestCase(TestCase):
         with app.app_context():
             command.stamp(self.alembic_configuration, 'base')
             db_session.remove()
-            # Base.metadata.drop_all(bind=engine)
+            Base.metadata.drop_all(bind=engine)

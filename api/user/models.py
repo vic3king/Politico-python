@@ -3,15 +3,15 @@ import datetime
 import bcrypt
 import jwt
 
-from sqlalchemy import (Column, String, Integer, Enum, Index)
+from sqlalchemy import (Column, String, Integer, Enum)
 from sqlalchemy.schema import Sequence
-from sqlalchemy.event import listens_for, listen
+from sqlalchemy.event import listen
 
-from config import config
 from helpers.database import Base
 from utilities.utility import Utility, UserType
 
 secret = os.getenv('SECRET_KEY')
+
 
 class User(Base, Utility):
     __tablename__ = 'users'
@@ -33,7 +33,7 @@ class User(Base, Utility):
 
     def hash_password(self):
         hashed_password = bcrypt.hashpw(
-            self.password.encode('utf-8'), 
+            self.password.encode('utf-8'),
             bcrypt.gensalt()
         )
 
@@ -44,7 +44,7 @@ class User(Base, Utility):
     def verify_password(self, password):
         password_hash = self.password.encode('utf-8')
 
-        return bcrypt.hashpw(password.encode('utf-8'), password_hash) == password_hash
+        return bcrypt.hashpw(password.encode('utf-8'), password_hash) == password_hash  # noqa
 
     def generate_token(self):
         token = jwt.encode(
@@ -64,5 +64,6 @@ class User(Base, Utility):
         )
 
         return payload
+
 
 listen(User, 'before_insert', User.pre_save)

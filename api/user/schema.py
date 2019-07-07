@@ -7,7 +7,7 @@ from utilities.validations import verify_email
 from helpers.auth.error_handler import SaveContextManager
 
 # decorators
-from helpers.auth.auth import login_required
+# from helpers.auth.auth import login_required
 
 
 class User(SQLAlchemyObjectType):
