@@ -7,7 +7,7 @@ defaults: &defaults
   docker:
     # specify the version you desire here
     # use `-browsers` prefix for selenium tests, e.g. `3.7-browsers`
-    - image: circleci/python:3.6.1
+    - image: circleci/python:3.7
       environment:
         APP_SETTING: testing
         TEST_DATABASE_URL: postgresql://postgres@localhost/test
@@ -36,7 +36,6 @@ cc_setup: &cc_setup
     command: |
       curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
       chmod +x ./cc-test-reporter
-
 #install dependencies
 install_dependencies: &install_dependencies
   run:
@@ -45,7 +44,6 @@ install_dependencies: &install_dependencies
       python -m venv venv
       . venv/bin/activate
       pip install -r requirements.txt
-
 #save cache
 save_the_cache: &save_the_cache
   save_cache:
@@ -59,60 +57,68 @@ store_the_artifacts: &store_the_artifacts
     path: test-reports
     destination: test-reports
 
+version: 2
+jobs:
+  test-2.7:
+    <<: *defaults
+    <<: *set_workspace
+
+    steps:
+      - checkout
+      - *restore_the_cache
+      - *install_dependencies
+      - *save_the_cache
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            tox -e python2.7
+            coverage xml
+      - *store_the_artifacts
+
+  test-3.7-flake:
+    <<: *defaults
+    <<: *set_workspace
+
+    steps:
+      - checkout
+      - *restore_the_cache
+      - *install_dependencies
+      - *save_the_cache
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            tox -e python3.7
+            tox -e flake8
+            coverage xml
+      - *store_the_artifacts
+
+  code-climate:
+    <<: *defaults
+    <<: *set_workspace
+
+    steps:
+      - checkout
+      - *restore_the_cache
+      - *cc_setup
+      - run:
+          name: consolidate results
+          command: |
+            ./cc-test-reporter before-build
+            . venv/bin/activate
+            coverage combine parallel-coverage/ 
+            coverage xml
+            coverage report
+            ./cc-test-reporter format-coverage -o ./.coverage -t coverage.py
+            ./cc-test-reporter upload-coverage -i .coverage
 workflows:
   version: 2
-  build-test-and-deploy:
+  build-then-deploy:
     jobs:
-      test-2.7:
-        <<: *defaults
-        <<: *set_workspace
-
-        steps:
-          - checkout
-          - *restore_the_cache
-          - *install_dependencies
-          - *save_the_cache
-          - run:
-              name: run tests
-              command: |
-                . venv/bin/activate
-                tox -e python2.7
-                coverage xml
-          - *store_the_artifacts
-
-      test-3.7-flake:
-        <<: *defaults
-        <<: *set_workspace
-
-        steps:
-          - checkout
-          - *restore_the_cache
-          - *install_dependencies
-          - *save_the_cache
-          - run:
-              name: run tests
-              command: |
-                . venv/bin/activate
-                tox -e python3.7
-                tox -e flake8
-                coverage xml
-          - *store_the_artifacts
-
-      code-climate:
-        <<: *defaults
-        <<: *set_workspace
-
-        steps:
-          - checkout
-          - *restore_the_cache
-          - *cc_setup
-          - run:
-              name: consolidate results
-              command: |
-                ./cc-test-reporter before-build
-                . venv/bin/activate
-                coverage combine parallel-coverage/ 
-                coverage xml
-                coverage report
-                ./cc-test-reporter format-coverage -o ./.coverage -t coverage.py
-                ./cc-test-reporter upload-coverage -i .coverage
+      - test-2.7
+      - test-3.7-flake
+      - code-climate:
+          requires:
+            - test-2.7
+            - test-3.7-flake
