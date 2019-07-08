@@ -1,10 +1,6 @@
-
 import sys
 import os
 from logging.config import fileConfig
-from helpers.database import Base
-from api.user.models import User
-
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -29,6 +25,10 @@ elif os.getenv('APP_SETTINGS') == 'production':
 
 sys.path.append(os.getcwd())
 config.set_main_option('sqlalchemy.url', database_url)
+
+from helpers.database import Base
+from api.user.models import User
+
 
 # add your model's MetaData object here
 # for 'autogenerate' support

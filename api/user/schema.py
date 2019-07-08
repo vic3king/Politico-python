@@ -7,7 +7,7 @@ from utilities.validations import verify_email
 from helpers.auth.error_handler import SaveContextManager
 
 # decorators
-# from helpers.auth.auth import login_required
+from helpers.auth.auth import login_required
 
 
 class User(SQLAlchemyObjectType):
@@ -31,17 +31,20 @@ class CreateUser(graphene.Mutation):
         picture = graphene.String()
         user_type = graphene.String()
 
+    token = graphene.String()
     user = graphene.Field(User)
 
     def mutate(self, info, **kwargs):
         user = UserModel(**kwargs)
+
         if not verify_email(user.email):
             raise GraphQLError("This email is not allowed")
         payload = {
             'model': UserModel, 'field': 'email', 'value':  kwargs['email']
         }
         with SaveContextManager(user, 'User email', payload):
-            return CreateUser(user=user)
+            token = user.generate_token()
+            return CreateUser(user=user, token=token)
 
 
 class allUsers(graphene.ObjectType):
@@ -56,7 +59,7 @@ class Query(graphene.ObjectType):
         User,
         description="Returns a list of all users")
 
-    # @login_required
+    @login_required
     def resolve_all_users(self, info):
         # get all users
         query = User.get_query(info)

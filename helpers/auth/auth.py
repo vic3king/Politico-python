@@ -1,6 +1,7 @@
 from functools import wraps
 import jwt
 from flask import request, g
+from graphql import GraphQLError
 
 from api.user.models import User
 
@@ -9,10 +10,7 @@ def login_required(fn):
     @wraps(fn)
     def wrapper(*args, **kwargs):
         if 'Authorization' not in request.headers:
-            return {
-                'status': 'error',
-                'message': 'Token not provided or is invalid.'
-            }, 401
+            raise GraphQLError('Token not provided or is invalid.')
 
         user_id = None
         auth_header = request.headers.get('Authorization')
@@ -23,13 +21,12 @@ def login_required(fn):
 
         try:
             user_id = User.decode_token(auth_token).get('id')
+            user_type = User.decode_token(auth_token).get('user_type')
 
             g.user_id = user_id
+            g.user_type = user_type
         except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
-            return {
-                'status': 'error',
-                'message': 'Token not provided or is invalid.'
-            }, 401
+            raise GraphQLError('Token not provided or is invalid.')
 
         return fn(*args, **kwargs)
 

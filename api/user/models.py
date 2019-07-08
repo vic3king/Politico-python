@@ -15,18 +15,17 @@ secret = os.getenv('SECRET_KEY')
 
 class User(Base, Utility):
     __tablename__ = 'users'
-    id = Column(Integer, Sequence('users_id_seq', start=1, increment=1), primary_key=True) # noqa
+    id = Column(Integer, Sequence('users_id_seq', start=1), primary_key=True) # noqa
     first_name = Column(String, nullable=False)
     last_name = Column(String, nullable=False)
     other_names = Column(String, nullable=True)
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     picture = Column(String, nullable=True)
-    user_type = Column(Enum(UserType), default="admin")
+    user_type = Column(Enum(UserType), default="citizen")
     created_at = Column(String, default=datetime.datetime.now)
     updated_at = Column(String, default=datetime.datetime.now)
 
-    # @listens_for(User, 'before_insert')
     @staticmethod
     def pre_save(mapper, connect, target):
         target.hash_password()
@@ -48,7 +47,7 @@ class User(Base, Utility):
 
     def generate_token(self):
         token = jwt.encode(
-            {'id': str(self.id)},
+            {'id': str(self.id), 'user_type': self.user_type.value},
             secret,
             algorithm='HS256'
         )

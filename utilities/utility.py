@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 from helpers.database import db_session
 
 
@@ -15,7 +15,7 @@ class Utility(object):
         db_session.commit()
 
 
-class UserType(enum.Enum):
+class UserType(Enum):
     admin = "admin"
     politician = "politician"
     citizen = "citizen"
