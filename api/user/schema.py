@@ -7,7 +7,7 @@ from utilities.validations import verify_email
 from helpers.auth.error_handler import SaveContextManager
 
 # decorators
-from helpers.auth.auth import login_required
+from helpers.auth.auth import Authentication
 
 
 class User(SQLAlchemyObjectType):
@@ -55,15 +55,47 @@ class allUsers(graphene.ObjectType):
 
 
 class Query(graphene.ObjectType):
+    """
+        Query to get list of all users
+    """
     all_users = graphene.List(
         User,
         description="Returns a list of all users")
 
-    @login_required
+    """
+        Query to get a particular user
+    """
+    login_user = graphene.Field(
+        User,
+        user_email=graphene.String(),
+        user_password=graphene.String(),
+        description="Returns a particular user and accepts the arguments\
+            \n- user_email: The email address of the user trying to login\
+            [required]\
+            \n- user_password: The password for the user trying to login\
+            [required]")
+
+    @Authentication.login_required
     def resolve_all_users(self, info):
         # get all users
         query = User.get_query(info)
         return query
+
+    def resolve_login_user(self, info, user_email, user_password):
+        query = User.get_query(info)
+        user = query.filter(UserModel.email == user_email).first()
+
+        if not user:
+            raise GraphQLError("User not found")
+
+        verify_user = Authentication.verify_password(
+            user_password, user.password
+        )
+
+        if not verify_user:
+            raise GraphQLError("Incorrect credentials supplied")
+
+        return user
 
 
 class Mutation(graphene.ObjectType):
