@@ -40,11 +40,6 @@ class User(Base, Utility):
 
         return self.password
 
-    def verify_password(self, password):
-        password_hash = self.password.encode('utf-8')
-
-        return bcrypt.hashpw(password.encode('utf-8'), password_hash) == password_hash  # noqa
-
     def generate_token(self):
         token = jwt.encode(
             {'id': str(self.id), 'user_type': self.user_type.value},

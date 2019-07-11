@@ -1,6 +1,9 @@
 from tests.base import BaseTestCase
 from fixtures.user.user_fixture import (
     user_mutation_query, user_mutation_response,
+    user_mutation_query_invalid_email,
+    user_mutation_response_invalid_email,
+    user_duplication_mutation_response
 )
 
 from helpers.database import db_session
@@ -21,4 +24,30 @@ class TestCreateUser(BaseTestCase):
             context_value={'session': db_session})
 
         expected_response = user_mutation_response
+        self.assertEqual(execute_query, expected_response)
+
+    def test_user_duplication(self):
+        """
+        Testing for creation of an already existing user
+        """
+        self.client.execute(user_mutation_query,
+                            context_value={'session': db_session})
+        # Try to create a user twice
+        query_response = self.client.execute(
+            user_mutation_query,
+            context_value={'session': db_session})
+
+        expected_response = user_duplication_mutation_response
+        self.assertEqual(query_response, expected_response)
+
+    def test_user_creation_with_invalid_mail(self):
+        """
+        Testing for Invalid email when creating a new user
+        """
+
+        execute_query = self.client.execute(
+            user_mutation_query_invalid_email,
+            context_value={'session': db_session})
+
+        expected_response = user_mutation_response_invalid_email
         self.assertEqual(execute_query, expected_response)
