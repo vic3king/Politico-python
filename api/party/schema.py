@@ -33,7 +33,7 @@ class CreateParty(graphene.Mutation):
     party = graphene.Field(Party)
 
     @Authentication.login_required
-    @Authentication.user_roles(['politician'])
+    @Authentication.user_roles(['admin'])
     def mutate(self, info, **kwargs):
         hq_address = verify_address(api_key, kwargs['hq_address'])
 
