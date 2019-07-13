@@ -19,3 +19,8 @@ class UserType(Enum):
     admin = "admin"
     politician = "politician"
     citizen = "citizen"
+
+
+class Party_Status(Enum):
+    new = "new"
+    updated = "updated"

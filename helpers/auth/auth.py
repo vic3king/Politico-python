@@ -52,3 +52,22 @@ class Authentication:
             return fn(*args, **kwargs)
 
         return wrapper
+
+    def user_roles(expected_args):
+        def decorator(fn):
+            @wraps(fn)
+            def wrapper(*args, **kwargs):
+                auth_header = request.headers.get('Authorization')
+                auth_token = auth_header.split(" ")[1]
+                user_type = User.decode_token(auth_token).get('user_type')
+
+                if user_type in expected_args:
+                    res = fn(*args, **kwargs)
+                    return res
+                else:
+                    raise GraphQLError(
+                        "You are not authorized to perform this action"
+                    )
+
+            return wrapper
+        return decorator
