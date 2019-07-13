@@ -36,7 +36,7 @@ class User(Base, Utility):
             bcrypt.gensalt()
         )
 
-        self.password = hashed_password.decode('utf-8')
+        self.password = hashed_password
 
         return self.password
 

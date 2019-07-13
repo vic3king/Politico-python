@@ -1,3 +1,4 @@
 import os
 
-USER_TOKEN = os.getenv("USER_TOKEN")
+CITIZEN_TOKEN = os.getenv("CITIZEN_TOKEN")
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")

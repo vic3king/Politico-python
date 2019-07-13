@@ -20,7 +20,7 @@ class TestQueryAllUsers(BaseTestCase):
         Testing query to return all users
         """
 
-        CommonTestCases.user_token_assert_equal(
+        CommonTestCases.citizen_token_assert_equal(
             self,
             all_users_query,
             all_users_response

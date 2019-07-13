@@ -13,9 +13,10 @@ from helpers.database import engine, db_session, Base
 
 # Models
 from api.user.models import User
+from api.party.models import Party
 
 # Fixtures
-from fixtures.token.token_fixture import USER_TOKEN
+from fixtures.token.token_fixture import CITIZEN_TOKEN, ADMIN_TOKEN
 sys.path.append(os.getcwd())
 
 
@@ -64,6 +65,10 @@ class BaseTestCase(TestCase):
                                    user_type="politician")
 
             politician_user.save()
+            party = Party(party_name="party",
+                          hq_address="5 City Of Power Avenue, Somolu, Lagos, Nigeria",
+                          logo_url="www.ipsum/pic")
+            party.save()
 
     def tearDown(self):
         app = self.create_app()
@@ -77,18 +82,32 @@ class CommonTestCases(BaseTestCase):
     """Common test cases throught the code.
     This code is used to reduce duplication
     :params
-        - loggedin_user_token_assert_equal
+        - loggedin_CITIZEN_TOKEN_assert_equal
     """
 
-    def user_token_assert_equal(self, query, expected_response):
+    def citizen_token_assert_equal(self, query, expected_response):
         """
-        Make a request with verified user token and use assertEquals
+        Make a request with verified citizen token and use assertEquals
         to compare the values
         :params
             - query, expected_response
         """
 
-        headers = {"Authorization": "Bearer" + " " + USER_TOKEN}
+        headers = {"Authorization": "Bearer" + " " + CITIZEN_TOKEN}
+        response = self.app_test.post(
+            '/politico?query=' + query, headers=headers)
+        actual_response = json.loads(response.data)
+        self.assertEquals(actual_response, expected_response)
+
+    def admin_token_assert_equal(self, query, expected_response):
+        """
+        Make a request with verified admin token and use assertEquals
+        to compare the values
+        :params
+            - query, expected_response
+        """
+
+        headers = {"Authorization": "Bearer" + " " + ADMIN_TOKEN}
         response = self.app_test.post(
             '/politico?query=' + query, headers=headers)
         actual_response = json.loads(response.data)
