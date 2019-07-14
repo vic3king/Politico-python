@@ -17,7 +17,6 @@ class User(SQLAlchemyObjectType):
     class Meta:
         model = UserModel
 
-
 class CreateUser(graphene.Mutation):
     """
         Mutation to create a user
@@ -52,6 +51,21 @@ class allUsers(graphene.ObjectType):
         all users
     """
     users = graphene.List(User)
+    
+class ResponseDetails(graphene.ObjectType):
+    id = graphene.Int()
+    first_name = graphene.String(),
+    last_name = graphene.String(),
+    other_names = graphene.String(),
+    email = graphene.String(),
+    picture = graphene.String(),
+    user_type = graphene.String(),
+    created_at = graphene.DateTime(),
+    updated_at = graphene.DateTime()
+
+class LoginResponse(graphene.ObjectType):
+    token = graphene.String()
+    user = graphene.Field(User)
 
 
 class Query(graphene.ObjectType):
@@ -66,7 +80,7 @@ class Query(graphene.ObjectType):
         Query to get a particular user
     """
     login_user = graphene.Field(
-        User,
+        LoginResponse,
         user_email=graphene.String(),
         user_password=graphene.String(),
         description="Returns a particular user and accepts the arguments\
@@ -95,7 +109,10 @@ class Query(graphene.ObjectType):
         if not verify_user:
             raise GraphQLError("Incorrect credentials supplied")
 
-        return user
+        # import pdb; pdb.set_trace()
+        token = user.generate_token()
+
+        return LoginResponse(token=token, user=user)
 
 
 class Mutation(graphene.ObjectType):

@@ -1,21 +1,25 @@
 login_user_query = '''
 query{
-    loginUser(userEmail: "admin@yahoo.com", userPassword: "12345678"){
-            firstName
-            lastName
-            email
-            userType
-      }
+  loginUser(userEmail:"admin@yahoo.com", userPassword:"12345678"){
+    user {
+      id
+      firstName
+      lastName
+        email
     }
+  }
+}
 '''
 
 login_user_query_incorrect_credentials = '''
 {
   loginUser(userEmail:"admin@yahoo.com", userPassword:"dfwefwe"){
-    firstName
-    lastName
-    email
-    userType
+    user {
+        firstName
+        lastName
+        email
+        userType
+    }
   }
 }
 '''
@@ -23,20 +27,24 @@ login_user_query_incorrect_credentials = '''
 login_user_query_user_not_found = '''
 {
   loginUser(userEmail:"admffin@yahoo.com", userPassword:"dfwefwe"){
-    firstName
-    lastName
-    email
-    userType
+   user {
+        firstName
+        lastName
+        email
+        userType
+    }
   }
 }
 '''
 login_user_response = {
     "data": {
         "loginUser": {
-            "firstName": "doe",
-            "lastName": "jon",
-            "email": "admin@yahoo.com",
-            "userType": "ADMIN"
+            "user": {
+                "id": "1",
+                "firstName": "doe",
+                "lastName": "jon",
+                "email": "admin@yahoo.com"
+            }
         }
     }
 }

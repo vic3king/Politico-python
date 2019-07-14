@@ -35,6 +35,8 @@ class SaveContextManager():
                 res = ErrorHandler.foreign_key_conflict(
                     self, self.entity_name, self.entity)
             return res
+        except exc.DataError:
+            return ErrorHandler.invalid_data_error(self)
         except exc.DBAPIError:
             return ErrorHandler.db_connection(self)
 
