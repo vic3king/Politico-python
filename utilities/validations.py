@@ -19,6 +19,10 @@ class ErrorHandler():
         raise GraphQLError(
             '{} {} does not exists'.format(entity_name, entity))
 
+    def invalid_data_error(self):
+        # Database data error
+        raise GraphQLError('Error: Invalid data supplied to parameters')
+
     def db_connection(self):
         # Database connection error
         raise GraphQLError('Error: Could not connect to Db')
