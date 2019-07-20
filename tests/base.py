@@ -14,6 +14,8 @@ from helpers.database import engine, db_session, Base
 # Models
 from api.user.models import User
 from api.party.models import Party
+from api.office.models import Office
+
 
 # Fixtures
 from fixtures.token.token_fixture import CITIZEN_TOKEN, ADMIN_TOKEN
@@ -66,9 +68,14 @@ class BaseTestCase(TestCase):
 
             politician_user.save()
             party = Party(party_name="party",
-                          hq_address="5 City Of Power Avenue, Somolu, Lagos, Nigeria",
+                          hq_address="5 City Of Power Avenue, Somolu, Lagos, Nigeria",  # noqa
                           logo_url="www.ipsum/pic")
             party.save()
+            office = Office(office_name="office",
+                            office_type="state",
+                            age_limit=50,
+                            description="my testing office")
+            office.save()
 
     def tearDown(self):
         app = self.create_app()

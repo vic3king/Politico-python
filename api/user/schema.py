@@ -3,7 +3,7 @@ from graphene_sqlalchemy import (SQLAlchemyObjectType)
 from graphql import GraphQLError
 
 from api.user.models import User as UserModel
-from utilities.validations import verify_email
+from utilities.validations import verify_email, validate_entity_types
 from helpers.auth.error_handler import SaveContextManager
 
 # decorators
@@ -16,6 +16,7 @@ class User(SQLAlchemyObjectType):
     """
     class Meta:
         model = UserModel
+
 
 class CreateUser(graphene.Mutation):
     """
@@ -34,6 +35,7 @@ class CreateUser(graphene.Mutation):
     user = graphene.Field(User)
 
     def mutate(self, info, **kwargs):
+        validate_entity_types(['admin', 'citizen', 'politician'], 'user_type', **kwargs) # noqa
         user = UserModel(**kwargs)
 
         if not verify_email(user.email):
@@ -51,7 +53,8 @@ class allUsers(graphene.ObjectType):
         all users
     """
     users = graphene.List(User)
-    
+
+
 class ResponseDetails(graphene.ObjectType):
     id = graphene.Int()
     first_name = graphene.String(),
@@ -62,6 +65,7 @@ class ResponseDetails(graphene.ObjectType):
     user_type = graphene.String(),
     created_at = graphene.DateTime(),
     updated_at = graphene.DateTime()
+
 
 class LoginResponse(graphene.ObjectType):
     token = graphene.String()
