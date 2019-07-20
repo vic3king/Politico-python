@@ -26,3 +26,29 @@ class ErrorHandler():
     def db_connection(self):
         # Database connection error
         raise GraphQLError('Error: Could not connect to Db')
+
+
+# def validate_question_type(**kwargs):
+#     """
+#     Function to validate the question types,
+#     should allow only check, input and rate
+#     :params kwargs
+#     """
+#     question_types = ['check', 'input', 'rate', 'missing_items']
+#     if 'question_type' in kwargs:
+#         type = kwargs['question_type']
+#         if type.lower() not in question_types:
+#             raise AttributeError("Not a valid question type")
+
+
+def validate_entity_types(list_of_types, field_to_check, **kwargs):
+    """
+    Function to validate the Enum types,
+    should allow only callow client provide a
+    type from the list_types for the field_to_check
+    """
+
+    if field_to_check in kwargs:
+        type = kwargs[field_to_check]
+        if type.lower() not in list_of_types:
+            raise AttributeError(f"Invalid type provided for field {field_to_check}") # noqa

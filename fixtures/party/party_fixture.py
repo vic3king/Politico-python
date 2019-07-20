@@ -1,6 +1,7 @@
 party_mutation_query = '''
 mutation{
-  createParty(partyName: "test-party", hqAddress: "no 5 city of power avenue", logoUrl: "www.ipsum/pic"){
+  createParty(partyName: "test-party",
+  hqAddress: "no 5 city of power avenue", logoUrl: "www.ipsum/pic"){
     party{
       partyName
       logoUrl
@@ -14,7 +15,8 @@ mutation{
 
 party_mutation_duplication_query = '''
 mutation{
-  createParty(partyName: "party", hqAddress: "no 5 city of power avenue", logoUrl: "www.ipsum/pic"){
+  createParty(partyName: "party",
+  hqAddress: "no 5 city of power avenue", logoUrl: "www.ipsum/pic"){
     party{
       partyName
       logoUrl
@@ -27,7 +29,8 @@ mutation{
 '''
 party_invalid_address_mutation_query = '''
 mutation{
-  createParty(partyName: "party", hqAddress: "no 5 city of powerfbdvrbrber avenue", logoUrl: "www.ipsum/pic"){
+  createParty(partyName: "party",
+  hqAddress: "no 5 city of asdf avenue", logoUrl: "www.ipsum/pic"){
     party{
       partyName
       logoUrl
@@ -76,7 +79,7 @@ party_mutation_duplication_response = {
 party_mutation_invalid_address_response = {
     "errors": [
         {
-            "message": "no 5 city of powerfbdvrbrber avenue not found, enter a valid address",
+            "message": "no 5 city of asdf avenue not found, enter a valid address",
             "locations": [
                 {
                     "line": 3,

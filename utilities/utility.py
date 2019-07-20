@@ -24,3 +24,15 @@ class UserType(Enum):
 class Party_Status(Enum):
     new = "new"
     updated = "updated"
+
+
+class Office_Status(Enum):
+    new = "new"
+    updated = "updated"
+
+
+class OfficeType(Enum):
+    federal = "federal"
+    legislative = "legislative"
+    local_government = "local_government"
+    state = "local-government"
