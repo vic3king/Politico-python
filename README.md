@@ -42,9 +42,9 @@ source venv/bin/activate
 # create and setup .env file according to .env.exampl
 
 # Run migrations
-alembic init
-alembic stamp head
-alembic upgrade head
+python manage.py db init
+python manage.py db migrate
+ython manage.py db upgrade 
 
 #Start the application
 python3 manage.py runserver
