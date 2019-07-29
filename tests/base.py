@@ -23,11 +23,10 @@ sys.path.append(os.getcwd())
 
 
 class BaseTestCase(TestCase):
-    alembic_configuration = config.Config("./alembic.ini")
 
     def create_app(self):
         app = create_app('testing')
-        self.base_url = 'https://127.0.0.1:5000/politico'
+        self.base_url = 'https://127.0.0.1:5000/graphql'
         self.headers = {'content-type': 'application/json'}
         self.client = Client(schema)
         return app
@@ -37,9 +36,6 @@ class BaseTestCase(TestCase):
         self.app_test = app.test_client()
         with app.app_context():
             Base.metadata.create_all(bind=engine)
-            command.stamp(self.alembic_configuration, 'head')
-            command.downgrade(self.alembic_configuration, '-1')
-            command.upgrade(self.alembic_configuration, 'head')
             admin_user = User(first_name="doe",
                               last_name="jon",
                               other_names="smith",
@@ -76,11 +72,11 @@ class BaseTestCase(TestCase):
                             age_limit=50,
                             description="my testing office")
             office.save()
+            db_session.commit()
 
     def tearDown(self):
         app = self.create_app()
         with app.app_context():
-            command.stamp(self.alembic_configuration, 'base')
             db_session.remove()
             Base.metadata.drop_all(bind=engine)
 
@@ -102,7 +98,7 @@ class CommonTestCases(BaseTestCase):
 
         headers = {"Authorization": "Bearer" + " " + CITIZEN_TOKEN}
         response = self.app_test.post(
-            '/politico?query=' + query, headers=headers)
+            '/graphql?query=' + query, headers=headers)
         actual_response = json.loads(response.data)
         self.assertEquals(actual_response, expected_response)
 
@@ -116,6 +112,6 @@ class CommonTestCases(BaseTestCase):
 
         headers = {"Authorization": "Bearer" + " " + ADMIN_TOKEN}
         response = self.app_test.post(
-            '/politico?query=' + query, headers=headers)
+            '/graphql?query=' + query, headers=headers)
         actual_response = json.loads(response.data)
         self.assertEquals(actual_response, expected_response)

@@ -44,6 +44,7 @@ install_dependencies: &install_dependencies
       python -m venv venv
       . venv/bin/activate
       pip install -r requirements.txt
+      python3 manage.py db upgrade
 #save cache
 save_the_cache: &save_the_cache
   save_cache:
