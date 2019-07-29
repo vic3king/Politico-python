@@ -17,14 +17,10 @@ def create_app(config_name):
     app.config.from_object(config[config_name])
     config[config_name].init_app(app)
 
-    # @app.route("/", methods=['GET'])
-    # def index():
-    #     return render_template('index.html')
-
     app.add_url_rule(
-        '/politico',
+        '/graphql',
         view_func=GraphQLView.as_view(
-            'politico',
+            'graphql',
             schema=schema,
             graphiql=True   # for having the GraphiQL interface
         )

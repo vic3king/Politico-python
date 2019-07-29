@@ -1,3 +1,4 @@
+from helpers.database import Base
 import sys
 import os
 from logging.config import fileConfig
@@ -26,9 +27,9 @@ elif os.getenv('APP_SETTINGS') == 'production':
 sys.path.append(os.getcwd())
 config.set_main_option('sqlalchemy.url', database_url)
 
-from helpers.database import Base
 from api.user.models import User
-
+from api.office.models import Office
+from api.party.models import Party
 
 # add your model's MetaData object here
 # for 'autogenerate' support
