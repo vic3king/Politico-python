@@ -1,0 +1,22 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2da37e7d1a8c9841ee62088f147bf6d4b5752e8fcfe8ed773950fc78f23506ab
+dist: xenial
+language: python
+python:
+  - "3.7"
+install:
+  - pip install -r requirements.txt
+services:
+  - postgresql
+before_script:  
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+  - psql -c 'create database politico;' -U postgres
+  - python3 manage.py db upgrade
+script:
+  - python3 -m coverage run -m pytest --cov=api/ --cov-report xml
+after_script:
+  - ./cc-test-reporter format-coverage -o ./.coverage -t coverage.py
+  - ./cc-test-reporter upload-coverage -i .coverage

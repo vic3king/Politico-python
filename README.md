@@ -1,6 +1,6 @@
 # Politico
 
-[![CircleCI](https://circleci.com/gh/vic3king/Politico-python.svg?style=svg)](https://circleci.com/gh/vic3king/Politico-python)
+[![Build Status](https://travis-ci.com/vic3king/Politico-python.svg?branch=master)](https://travis-ci.com/vic3king/Politico-python)
 [![Maintainability](https://api.codeclimate.com/v1/badges/25b45e5ab91006cbbb4f/maintainability)](https://codeclimate.com/github/vic3king/Politico-python/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/25b45e5ab91006cbbb4f/test_coverage)](https://codeclimate.com/github/vic3king/Politico-python/test_coverage)
 

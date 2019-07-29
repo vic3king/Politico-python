@@ -97,6 +97,7 @@ class CommonTestCases(BaseTestCase):
         """
 
         headers = {"Authorization": "Bearer" + " " + CITIZEN_TOKEN}
+        print(headers, '>>>>>>>>>>>>>>>>>>>>>>.')
         response = self.app_test.post(
             '/graphql?query=' + query, headers=headers)
         actual_response = json.loads(response.data)
