@@ -1,4 +1,6 @@
 import graphene
+from graphql import GraphQLError
+from sqlalchemy import desc
 from graphene_sqlalchemy import (SQLAlchemyObjectType)
 
 from api.office.models import Office as OfficeModel
@@ -43,6 +45,53 @@ class CreateOffice(graphene.Mutation):
         }
         with SaveContextManager(office, 'Office name', payload):
             return CreateOffice(office=office)
+
+
+class allOffices(graphene.ObjectType):
+    """
+        Get all offices
+    """
+    offices = graphene.List(Office)
+
+
+class SingleOffice(graphene.ObjectType):
+    office = graphene.Field(Office)
+
+
+class Query(graphene.ObjectType):
+    all_offices = graphene.List(
+        Office,
+        limit=graphene.Int(),
+        offset=graphene.Int(),
+        description="Returns a list of all offices \
+        \n- limit: Limit number of offices to return\
+        \n- offset: Number of offices to skip")
+
+    single_office = graphene.Field(
+        SingleOffice,
+        office_id=graphene.Int(),
+        description="Returns an office details and accepts argument\
+            \n- office_id: A unique identifier of the office"
+    )
+
+    @Authentication.login_required
+    def resolve_all_offices(self, info, **kwargs):
+        # get all officed
+        limit = kwargs.get('limit') or 10
+        offset = kwargs.get('offset') or 0
+        query = Office.get_query(info)
+        offices = query.order_by(
+            desc(OfficeModel.created_at)).offset(offset).limit(limit)
+        return offices
+
+    @Authentication.login_required
+    def resolve_single_office(self, info, office_id):
+        query = Office.get_query(info)
+        office = query.filter(OfficeModel.id == office_id).first()
+        if not office:
+            raise GraphQLError("office not found")
+
+        return SingleOffice(office=office)
 
 
 class Mutation(graphene.ObjectType):

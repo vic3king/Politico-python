@@ -85,3 +85,75 @@ office_mutation_duplication_query_response = {
         "createOffice": None
     }
 }
+
+allOffices_query = '''
+{
+  allOffices{
+    officeName
+    description
+  }
+}
+'''
+allOffices_query_response = {
+    "data": {
+        "allOffices": [
+            {
+                "officeName": "office",
+                "description": "my testing office"
+            }
+        ]
+    }
+}
+
+single_office_query = '''
+{
+  singleOffice(officeId: 1){
+    office {
+      officeName
+      description
+    }
+  }
+}
+'''
+single_office_query_response = {
+    "data": {
+        "singleOffice": {
+            "office": {
+                "officeName": "office",
+                "description": "my testing office"
+            }
+        }
+    }
+}
+
+single_office_query_not_found = '''
+{
+  singleOffice(officeId: 100){
+    office {
+      officeName
+      description
+    }
+  }
+}
+'''
+
+
+single_office_query_not_found_response = {
+    "errors": [
+        {
+            "message": "office not found",
+            "locations": [
+                {
+                    "line": 3,
+                    "column": 3
+                }
+            ],
+            "path": [
+                "singleOffice"
+            ]
+        }
+    ],
+    "data": {
+        "singleOffice": None
+    }
+}
