@@ -15,7 +15,9 @@ class Mutation(
 
 
 class Query(
-        api.user.schema.Query
+        api.user.schema.Query,
+        api.office.schema.Query,
+        api.party.schema.Query
 ):
     """Root for converge Graphql queries"""
     pass

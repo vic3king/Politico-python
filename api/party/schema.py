@@ -1,5 +1,7 @@
 import os
 import graphene
+from graphql import GraphQLError
+from sqlalchemy import desc
 from graphene_sqlalchemy import (SQLAlchemyObjectType)
 
 from api.party.models import Party as PartyModel
@@ -50,6 +52,53 @@ class CreateParty(graphene.Mutation):
         }
         with SaveContextManager(party, 'Party name', payload):
             return CreateParty(party=party)
+
+
+class allParties(graphene.ObjectType):
+    """
+        Get all parties
+    """
+    parties = graphene.List(Party)
+
+
+class SingleParty(graphene.ObjectType):
+    party = graphene.Field(Party)
+
+
+class Query(graphene.ObjectType):
+    all_parties = graphene.List(
+        Party,
+        limit=graphene.Int(),
+        offset=graphene.Int(),
+        description="Returns a list of all parties \
+        \n- limit: Limit number of parties to return\
+        \n- offset: Number of parties to skip")
+
+    single_party = graphene.Field(
+        SingleParty,
+        party_id=graphene.Int(),
+        description="Returns a party details and accepts argument\
+            \n- office_id: A unique identifier of the party"
+    )
+
+    @Authentication.login_required
+    def resolve_all_parties(self, info, **kwargs):
+        # get all parties
+        limit = kwargs.get('limit') or 10
+        offset = kwargs.get('offset') or 0
+        query = Party.get_query(info)
+        parties = query.order_by(
+            desc(PartyModel.created_at)).offset(offset).limit(limit)
+        return parties
+
+    @Authentication.login_required
+    def resolve_single_party(self, info, party_id):
+        query = Party.get_query(info)
+        party = query.filter(PartyModel.id == party_id).first()
+        if not party:
+            raise GraphQLError("party not found")
+
+        return SingleParty(party=party)
 
 
 class Mutation(graphene.ObjectType):

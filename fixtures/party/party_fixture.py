@@ -95,3 +95,79 @@ party_mutation_invalid_address_response = {
         "createParty": None
     }
 }
+
+allParties_query = '''
+ {
+  allParties{
+    partyName
+    hqAddress
+    logoUrl
+  }
+}
+ '''
+allParties_query_response = {
+    "data": {
+        "allParties": [
+            {
+                "partyName": "party",
+                "hqAddress": "5 City Of Power Avenue, Somolu, Lagos, Nigeria",
+                "logoUrl": "www.ipsum/pic"
+            }
+        ]
+    }
+}
+
+single_party_query = '''
+{
+  singleParty(partyId: 1){
+    party{
+      partyName
+      hqAddress
+      logoUrl
+    }
+  }
+}
+'''
+single_party_query_response = {
+    "data": {
+        "singleParty": {
+            "party": {
+                "partyName": "party",
+                "hqAddress": "5 City Of Power Avenue, Somolu, Lagos, Nigeria",
+                "logoUrl": "www.ipsum/pic"
+            }
+        }
+    }
+}
+
+single_party_query_not_found = '''
+{
+  singleParty(partyId: 30){
+    party{
+      partyName
+      hqAddress
+      logoUrl
+    }
+  }
+}
+'''
+
+single_party_query_not_found_response = {
+    "errors": [
+        {
+            "message": "party not found",
+            "locations": [
+                {
+                    "line": 3,
+                    "column": 3
+                }
+            ],
+            "path": [
+                "singleParty"
+            ]
+        }
+    ],
+    "data": {
+        "singleParty": None
+    }
+}
