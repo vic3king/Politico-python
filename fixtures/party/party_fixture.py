@@ -41,6 +41,48 @@ mutation{
   }
 }
 '''
+delete_party_mutation = '''
+mutation{
+  deleteParty(partyId: 1){
+    message
+  }
+}
+'''
+
+delete_party_does_not_exist_mutation = '''
+mutation{
+  deleteParty(partyId: 40){
+    message
+  }
+}
+'''
+
+delete_party_mutation_response = {
+    "data": {
+        "deleteParty": {
+            "message": "party party was deleted successfully"
+        }
+    }
+}
+delete_party_does_not_exist_response = {
+    "errors": [
+        {
+            "message": "Party does not exist",
+            "locations": [
+                {
+                    "line": 3,
+                    "column": 3
+                }
+            ],
+            "path": [
+                "deleteParty"
+            ]
+        }
+    ],
+    "data": {
+        "deleteParty": None
+    }
+}
 
 party_mutation_response = {
     "data": {
