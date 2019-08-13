@@ -11,6 +11,16 @@ Politico python version is a spin off of my initial project Politico. This Proje
 
 ## Features
 * Users can sign up.
+* Users can login.
+* Admin can create political office
+* Admin can create political party
+* Authenticated users can query all parties
+* Authenticated users can query for a party
+* Authenticated users can query all offices
+* Authenticated users can query an office
+* Admin can delete a party
+
+
 
 
 ## API Documentation
@@ -44,7 +54,7 @@ source venv/bin/activate
 # Run migrations
 python manage.py db init
 python manage.py db migrate
-ython manage.py db upgrade 
+python manage.py db upgrade 
 
 #Start the application
 python3 manage.py runserver

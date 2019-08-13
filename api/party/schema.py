@@ -54,6 +54,30 @@ class CreateParty(graphene.Mutation):
             return CreateParty(party=party)
 
 
+class DeleteParty(graphene.Mutation):
+    """
+        Mutation to delete a party
+    """
+
+    class Arguments:
+        party_id = graphene.Int(required=True)
+
+    message = graphene.String()
+
+    @Authentication.login_required
+    @Authentication.user_roles(['admin'])
+    def mutate(self, info, **kwargs):
+        query = Party.get_query(info)
+
+        party_query = query.filter(PartyModel.id == kwargs['party_id']).first()
+
+        if party_query:
+            party_query.delete()
+            return DeleteParty(message=f"{party_query.party_name} party was deleted successfully")
+        else:
+            return GraphQLError('Party does not exist')
+
+
 class allParties(graphene.ObjectType):
     """
         Get all parties
@@ -111,3 +135,7 @@ class Mutation(graphene.ObjectType):
             \n- hq_address: The hq_address field of the party[required]\
             \n- logo_url: The logo_url field of the party[required]\
             \n- status: The status field of the party, (new,updated)[required]")
+
+    delete_party = DeleteParty.Field(
+        description="Deletes an existing political party with the arguments\
+            \n- party_id: Unique identifier for the party to be deleted[required]")
