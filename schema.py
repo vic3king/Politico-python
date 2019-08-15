@@ -1,6 +1,7 @@
 import api.user.schema
 import api.party.schema
 import api.office.schema
+import api.candidate.schema
 
 from graphene import Schema
 
@@ -9,6 +10,7 @@ class Mutation(
     api.user.schema.Mutation,
     api.party.schema.Mutation,
     api.office.schema.Mutation,
+    api.candidate.schema.Mutation
 ):
     """Root for politico Graphql queries"""
     pass

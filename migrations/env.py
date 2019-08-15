@@ -30,6 +30,7 @@ config.set_main_option('sqlalchemy.url', database_url)
 from api.user.models import User
 from api.office.models import Office
 from api.party.models import Party
+from api.candidate.model import Candidate
 
 # add your model's MetaData object here
 # for 'autogenerate' support

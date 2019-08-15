@@ -18,7 +18,7 @@ from api.office.models import Office
 
 
 # Fixtures
-from fixtures.token.token_fixture import CITIZEN_TOKEN, ADMIN_TOKEN
+from fixtures.token.token_fixture import CITIZEN_TOKEN, ADMIN_TOKEN, POLITICIAN_TOKEN
 sys.path.append(os.getcwd())
 
 
@@ -97,7 +97,20 @@ class CommonTestCases(BaseTestCase):
         """
 
         headers = {"Authorization": "Bearer" + " " + CITIZEN_TOKEN}
-        print(headers, '>>>>>>>>>>>>>>>>>>>>>>.')
+        response = self.app_test.post(
+            '/graphql?query=' + query, headers=headers)
+        actual_response = json.loads(response.data)
+        self.assertEquals(actual_response, expected_response)
+
+    def politician_token_assert_equal(self, query, expected_response):
+        """
+        Make a request with verified politician token and use assertEquals
+        to compare the values
+        :params
+            - query, expected_response
+        """
+
+        headers = {"Authorization": "Bearer" + " " + POLITICIAN_TOKEN}
         response = self.app_test.post(
             '/graphql?query=' + query, headers=headers)
         actual_response = json.loads(response.data)
