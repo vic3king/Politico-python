@@ -26,6 +26,11 @@ all_users_response = {
                 "firstName": "doe",
                 "lastName": "jon",
                 "userType": "POLITICIAN"
+            },
+            {
+                "firstName": "doe",
+                "lastName": "jon",
+                "userType": "POLITICIAN"
             }
         ]
     }

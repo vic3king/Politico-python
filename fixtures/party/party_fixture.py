@@ -7,7 +7,6 @@ mutation{
       logoUrl
       status
       hqAddress
-      id
     }
   }
 }
@@ -91,8 +90,7 @@ party_mutation_response = {
                 "partyName": "test-party",
                 "logoUrl": "www.ipsum/pic",
                 "status": "NEW",
-                "hqAddress": "5 City Of Power Avenue, Somolu, Lagos, Nigeria",
-                "id": "2"
+                "hqAddress": "5 City Of Power Ave, Somolu, Lagos, Nigeria",
             }
         }
     }
@@ -151,10 +149,15 @@ allParties_query_response = {
     "data": {
         "allParties": [
             {
+                "partyName": "second_party",
+                "hqAddress": "5 City Of Power Avenue, Somolu, Lagos, Nigeria",
+                "logoUrl": "www.ipsum/pic"
+            },
+            {
                 "partyName": "party",
                 "hqAddress": "5 City Of Power Avenue, Somolu, Lagos, Nigeria",
                 "logoUrl": "www.ipsum/pic"
-            }
+            },
         ]
     }
 }

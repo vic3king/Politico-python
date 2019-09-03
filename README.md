@@ -111,7 +111,7 @@ Project is currently being managed with Pivotal Tracker, a project management to
 
 ## Authors
 
-* **Akaniru victory** - *Initial work* - [Vic3king](https://github.com/vic3king)
+* **Akaniru victory** - *Initial work* - [Vic3king](https://github.com/vic3king) if you've read this far... Leave a star ⭐️
 
 See also the list of [contributors](https://github.com/vic3king/politico/settings/collaboration) who participated in this project.
 
