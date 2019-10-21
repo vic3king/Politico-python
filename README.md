@@ -40,7 +40,7 @@ Follow the format specified in the .env example
 # Switch to directory
 cd Politico-python
 
-# Create virtual env
+# Create virtual env(make sure you have birtualenv installed)
 virtualenv --python=python3 venv
 
 # Activate virtual env
@@ -52,7 +52,6 @@ source venv/bin/activate
 # create and setup .env file according to .env.exampl
 
 # Run migrations
-python manage.py db init
 python manage.py db migrate
 python manage.py db upgrade 
 
@@ -101,9 +100,6 @@ To run pep8 and ensure youre following the style guide
 ```
 run flake8 --statistics
 ```
-
-### Style Guide
-* coming soon
 
 ## Pivotal Tracker
 
